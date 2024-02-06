@@ -15,7 +15,7 @@ clc;clear;
     load_existing = 0;          % Load existing pre-processed file
     % Crop MRI Z-Axis (use this to select the starting Z-point ro remove the
     % MRI below a certain point such as the nose)
-    z_start = 80;
+    z_start = 80; % IMPORTANT: You'll need to adjust your coordinate inputs for the inverse search only to account for the new MRI Z-dimension
 
 %%% PROCESSING %%%
 % Select which routines you would like to run
