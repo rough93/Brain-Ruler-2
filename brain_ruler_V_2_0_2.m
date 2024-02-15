@@ -171,7 +171,7 @@ save(subject_prefix_save)
 
 
 % test brain ruler program
-% changelog 2.0.2 - 2/15/2024 UNPUB
+% changelog 2.0.2 - 2/15/2024
 % - minor code fixes related to EEG preprocessing and search
 % - added import of Z-start for preprocessing
 %
