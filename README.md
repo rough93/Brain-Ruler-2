@@ -97,20 +97,27 @@ Once the MRI files have been added, click Run in the MATLAB Editor. The program 
 > [!IMPORTANT]
 > 1. MATLAB and Brain Ruler 2 are one-indexed, if you are importing coordinates from zero-index programs such as FSL, you’ll need to add one to your indexes here.
 > 2. Make sure the subject ID entered matches the directory where you placed the patient files, or the program will not be able to access them.
+> 3. Make sure to account for the z-cutoff if converting back into the MRI coordinate space (you’ll need to add back the Z-cutoff number)
+
 Each step is reported to the user to track program and task execution, as well as a timer for overall program steps.
 
 ### Inverse Search
+The inverse search function will ask for your desired cortical X, Y, and Z coordinates and provide the nearest point on the scalp as well as the distance between the two points. Keep in mind the above notes on indexing and the Z-cutoff.
 
 ### Direct Search
+Similarly to the inverse search function, the direct search function will ask for your desired scalp X, Y, and Z coordinates and provide the nearest point on the cortex as well as the distance between the two points. Keep in mind the above notes on indexing and the Z-cutoff.
 
 ### EEG 10-20
 **Cz Finder**
+
 The Cz finder generally takes under 30 seconds, and locates the Cz EEG point at the top of the head
 
 **Scalp Pathing**
+
 The scalp pathing routine can take up to 40 minutes to process, and creates paths around the head to accurately find EEG locations on the scalp. A development objective to reduce the time taken for this step is underway.
 
 **Search**
+
 The search routine can take up to 15 minutes, and is responsible for searching predefined boxes around each EEG point to locate the nearest cortical location based on the shortest distance.
 
 ### Program Outputs
