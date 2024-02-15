@@ -1,11 +1,11 @@
-function [subject_head,subject_brain,subject_skull,subject_scalp,res_x,res_y,res_z,trag,inion,circ,Cz,target_cluster,rcv,tri,FV2] = pre_process_func(pre_process_all,pre_process_standard,subject_number,subject_prefix_access_T1,subject_prefix_access_c1,subject_prefix_access_c4,subject_prefix_access_c5)
+function [subject_head,subject_brain,subject_skull,subject_scalp,res_x,res_y,res_z,trag,inion,circ,Cz,target_cluster,rcv,tri,FV2] = pre_process_func(pre_process_all,pre_process_standard,subject_number,subject_prefix_access_T1,subject_prefix_access_c1,subject_prefix_access_c4,subject_prefix_access_c5,z_start)
 
 fprintf('Loading subject MRI data\n')
 if isfile(append(subject_prefix_access_T1,'.nii'))
     subject_head = niftiread(subject_prefix_access_T1);
 else
-    fprintf('Exception 1: No subject head (T1) file detected, moving on\n')
-    subject_head = zeros(1,1,1);
+    fprintf('Exception 1: No subject head (T1) file detected, using scalp (c5)\n')
+    subject_head = niftiread(subject_prefix_access_c5);
 end
 if isfile(append(subject_prefix_access_c1,'.nii'))
     subject_brain = niftiread(subject_prefix_access_c1);
@@ -46,16 +46,15 @@ if pre_process_all == 1
     circ = input('Input Circumference (cm):');
 
     %%% Checkpoint 1 %%%
-    fprintf('Locating Subject Cz point: %f seconds\n', toc(start_time))
     [Cz] = Cz_finder(subject_head);
-    fprintf('Complete: %f seconds\n',toc(start_time))
     subject_prefix_save_Cz = fullfile('subjects',subject_number,strcat('main_cz','.mat'));
     save(subject_prefix_save_Cz)
 
-elseif pre_process_standard == 1
+end
+if pre_process_standard == 1 || pre_process_all == 1
 
     % crop mri to speed up processing time
-    target_cluster = subject_scalp(:,:,80:end);
+    target_cluster = subject_scalp(:,:,z_start:end);
 
     % find indices of all points at threshold value
     [r,c,v] = ind2sub(size(target_cluster),find(target_cluster==255));
