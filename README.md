@@ -62,5 +62,55 @@ You’ll need to provide the program with subject data before and during operati
 Subjects should have an assigned number in your roster and their files should be placed in the directory as:
 'subjects/[subject_number_here]/'
 An example with patient 1234:
-'subjects/1234/patient_head.nii'
-'subjects/1234/patient_brain.nii'
+```
+subjects/1234/patient_head.nii
+subjects/1234/patient_brain.nii
+```
+
+## Setting Up the Program
+
+### Adding files & Selecting Run Type
+As long as the files are named and located in the correct place, the program will locate and load them automatically when the patient ID is provided. When the program is started the user will be queried for the patient ID and output console responses for any files it cannot locate.
+
+The user will need to adjust the settings for the program at the top of the script to enable or disable running certain functions, as well as select whether preprocessing of the subject has already occurred.  Enable functions by changing the value of the associated variable from `0` to `1`. The following code preprocesses a new subject for direct and inverse searches (no EEG coordinates required) and executes direct and inverse search programs for the user after preprocessing. It also elects a Z-cutoff of 80.
+```
+    pre_process_all = 0;        % EEG 10-20 Points, scalp-starting SCD search, cortex starting SCD search (very long, not recommended if you don't need EEG 10-20 locations)
+    pre_process_standard = 1;   % Direct and inverse search mapping of the MRI (recommended for most standard users)
+    load_existing = 0;          % Load existing pre-processed file
+    % Crop MRI Z-Axis (use this to select the starting Z-point ro remove the
+    % MRI below a certain point such as the nose)
+    z_start = 80;
+
+%%% PROCESSING %%%
+% Select which routines you would like to run
+    eeg_run = 0;    % EEG 10-20 Points
+    dir_search = 1; % Direct Search (define points on scalp, get cortex points and distance)
+    inv_search = 1; % Inverse Search (define points in cortex, get points on scalp and distance)
+```
+
+## Running the Program
+Once the MRI files have been added, click Run in the MATLAB Editor. The program will ask for the subject ID and, if required, the respective head measurements in centimeters. 
+
+### Important Notes
+> 1. MATLAB and Brain Ruler 2 are one-indexed, if you are importing coordinates from zero-index programs such as FSL, you’ll need to add one to your indexes here.
+> 2. Make sure the subject ID entered matches the directory where you placed the patient files, or the program will not be able to access them.
+Each step is reported to the user to track program and task execution, as well as a timer for overall program steps.
+
+### Inverse Search
+
+### Direct Search
+
+### EEG 10-20
+**Cz Finder**
+The Cz finder generally takes under 30 seconds, and locates the Cz EEG point at the top of the head
+
+**Scalp Pathing**
+The scalp pathing routine can take up to 40 minutes to process, and creates paths around the head to accurately find EEG locations on the scalp. A development objective to reduce the time taken for this step is underway.
+
+**Search**
+The search routine can take up to 15 minutes, and is responsible for searching predefined boxes around each EEG point to locate the nearest cortical location based on the shortest distance.
+
+### Program Outputs
+Each step in the program generates a large amount of data, some of which is used by other routines in the program, and a large amount of which can be used to troubleshoot program errors. Thus each routine, and often subroutine, saves the generated data as .mat files within the subject id folder periodically throughout the script.
+
+The final outputs (the EEG point, cortical point, and distance table; and the 3D figure) are saved into the subject id folder as BrainRuler2_subjectid.mat and patient_processed.mat, respectively.
