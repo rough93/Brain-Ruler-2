@@ -1,14 +1,14 @@
-function [Cz] = Cz_finder(patient_head)
+function [Cz] = Cz_finder(subject_head)
 
 it = 1;
 stop = 0;
 %save_point = zeros(2000,3);
 save_point = [];
 
-for i = 1:size(patient_head,1)
-    for j = 1:size(patient_head,2)*2/3
-        for k = 1:size(patient_head,3)
-            if patient_head(i,j,k) > 200 % threshold for soft tissue
+for i = 1:size(subject_head,1)
+    for j = 1:size(subject_head,2)*2/3
+        for k = 1:size(subject_head,3)
+            if subject_head(i,j,k) > 200 % threshold for soft tissue
                 if isempty(save_point)%save_point(1) == 0%
                     %save_point(1,:) = [i j k];
                     save_point = [i j k];
@@ -53,7 +53,7 @@ d = -(a*trag_point(1)+b*trag_point(2)+c*trag_point(3));
 syms x y z
 plane1 = a*x+b*y+c*z+d==0;
 
-inion_point = [size(patient_head,1)/2,1,1];
+inion_point = [size(subject_head,1)/2,1,1];
 % inion_plane = [inion_point;...
 %     inion_point(1),inion_point(2)+1,inion_point(3);...
 %     inion_point(1),inion_point(2),inion_point(3)+1]; % 3 points to define plane
@@ -70,8 +70,8 @@ xyz = solve([plane1, plane2]);
 x = xyz.x;
 y = xyz.y;
 
-for z = size(patient_head,3):-1:1
-    if patient_head(x,y,z) > 25
+for z = size(subject_head,3):-1:1
+    if subject_head(x,y,z) > 25
         Cz = [x y z];
         break
     end
