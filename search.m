@@ -29,7 +29,7 @@ for iv = 1:searchend
     y = EEG_list(iv,2);
     z = EEG_list(iv,3);
     it = 1;
-
+    
     if iv == 1
         for iii = z-35:1:z
             for ii = y-30:1:y+30
@@ -62,7 +62,7 @@ for iv = 1:searchend
                     coordinate_list(it,:) = [xi,yii,ziii];
                     value_list(it) = subject_brain(xi,yii,ziii);
 
-                    if subject_brain(xi,yii,ziii) > 150
+                    if subject_brain(xi,yii,ziii) == 255
                         max_Coordinates(it,:) = [coordinate_list(it,1),coordinate_list(it,2),coordinate_list(it,3)];
                         max_Value(it) = subject_brain(coordinate_list(it,1),coordinate_list(it,2),coordinate_list(it,3));
                         distances(it) = sqrt(...
