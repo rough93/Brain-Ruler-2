@@ -1,4 +1,6 @@
-# Brain-Ruler-2
+# Brain-Ruler-2 
+[Current Release](https://github.com/rough93/Brain-Ruler-2/releases/latest)
+
 Repository for the Brain Ruler 2 program. Wiki at the [Brain Ruler 2 Notion](https://www.notion.so/brainruler/Brain-Ruler-Wiki-a59eebccfc844317acb4a300cddc4e6b)
 
 # Changelog
@@ -92,6 +94,7 @@ The user will need to adjust the settings for the program at the top of the scri
 Once the MRI files have been added, click Run in the MATLAB Editor. The program will ask for the subject ID and, if required, the respective head measurements in centimeters. 
 
 ### Important Notes
+> [!IMPORTANT]
 > 1. MATLAB and Brain Ruler 2 are one-indexed, if you are importing coordinates from zero-index programs such as FSL, you’ll need to add one to your indexes here.
 > 2. Make sure the subject ID entered matches the directory where you placed the patient files, or the program will not be able to access them.
 Each step is reported to the user to track program and task execution, as well as a timer for overall program steps.
