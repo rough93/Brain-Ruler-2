@@ -11,8 +11,8 @@
     % rename c4 file to 'subject_skull.nii'
     % rename c5 file to 'subject_scalp.nii'
     pre_process_all = 0;        % EEG 10-20 Points, scalp-starting SCD search, cortex starting SCD search (very long, not recommended if you don't need EEG 10-20 locations)
-    pre_process_standard = 0;   % Direct and inverse search mapping of the MRI (recommended for most standard users)
-    load_existing = 1;          % Load existing pre-processed file
+    pre_process_standard = 1;   % Direct and inverse search mapping of the MRI (recommended for most standard users)
+    load_existing = 0;          % Load existing pre-processed file
     % Crop MRI Z-Axis (use this to select the starting Z-point ro remove the
     % MRI below a certain point such as the nose)
     z_start = 80;   % IMPORTANT: You'll need to adjust your coordinate inputs for the inverse search only to account for the new MRI Z-dimension
@@ -21,7 +21,7 @@
 % Select which routines you would like to run
     eeg_run = 0;    % EEG 10-20 Points
     dir_search = 1; % Direct Search (define points on scalp, get cortex points and distance)
-    inv_search = 1; % Inverse Search (define points in cortex, get points on scalp and distance)
+    inv_search = 0; % Inverse Search (define points in cortex, get points on scalp and distance)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%% END OF SELECTIONS %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -54,7 +54,8 @@ subject_number = input('Input subject number (number where files are stored):\n'
      subject_prefix_access_T1,...
      subject_prefix_access_c1,...
      subject_prefix_access_c4,...
-     subject_prefix_access_c5);
+     subject_prefix_access_c5, ...
+     z_start);
  end
 
 
@@ -170,6 +171,10 @@ save(subject_prefix_save)
 
 
 % test brain ruler program
+% changelog 2.0.2 - 2/15/2024 UNPUB
+% - minor code fixes related to EEG preprocessing and search
+% - added import of Z-start for preprocessing
+%
 % changelog 2.0.1 - 2/15/2024
 % - Update direct search to output correct point and distance calculation
 % - Changed inverse search distance to display as positive (changed to absolute value of the vector)
