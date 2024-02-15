@@ -5,6 +5,10 @@ Repository for the Brain Ruler 2 program. Wiki at the [Brain Ruler 2 Notion](htt
 
 # Changelog
 
+## 2.0.2 - 02/15/2024
+- Minor code fixes related to EEG preprocessing and search
+- Added import of Z-start for preprocessing
+
 ## 2.0.1 - 02/15/2024
 - Update direct search to output correct point and distance calculation
 - Changed inverse search distance to display as positive (changed to absolute value of the vector)
