@@ -1,4 +1,4 @@
-clc;clear;
+    clc;clear;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% BRAIN RULER %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% START HERE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%% PRE-PROCESSING %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -11,11 +11,11 @@ clc;clear;
     % rename c4 file to 'subject_skull.nii'
     % rename c5 file to 'subject_scalp.nii'
     pre_process_all = 0;        % EEG 10-20 Points, scalp-starting SCD search, cortex starting SCD search (very long, not recommended if you don't need EEG 10-20 locations)
-    pre_process_standard = 1;   % Direct and inverse search mapping of the MRI (recommended for most standard users)
-    load_existing = 0;          % Load existing pre-processed file
+    pre_process_standard = 0;   % Direct and inverse search mapping of the MRI (recommended for most standard users)
+    load_existing = 1;          % Load existing pre-processed file
     % Crop MRI Z-Axis (use this to select the starting Z-point ro remove the
     % MRI below a certain point such as the nose)
-    z_start = 80; % IMPORTANT: You'll need to adjust your coordinate inputs for the inverse search only to account for the new MRI Z-dimension
+    z_start = 80;   % IMPORTANT: You'll need to adjust your coordinate inputs for the inverse search only to account for the new MRI Z-dimension
 
 %%% PROCESSING %%%
 % Select which routines you would like to run
@@ -61,33 +61,33 @@ subject_number = input('Input subject number (number where files are stored):\n'
 fprintf('\nInputs and preloading complete, beginning data processing at %f seconds\n\n',toc(start_time))
 
 % Inverse Search
-fprintf('\nCortex starting SCD:\n')
-continue_flag = 'Y';
 if inv_search == 1
+    fprintf('\nCortex starting SCD:\n')
+    continue_flag = 'Y';
     while continue_flag == 'Y'
         target_coord_x = input('Enter target X coordinate\n');
         target_coord_y = input('Enter target Y coordinate\n');
         target_coord_z = input('Enter target Z coordinate\n');
         target_coords = [target_coord_x, target_coord_y, target_coord_z];
         [distances, surface_points] = inverse_search(FV2,target_coords);
-        fprintf('Coordinate: %f,%f,%f\nDistance: %f\n\n',surface_points(1),surface_points(2),surface_points(3),distances)
+        fprintf('Coordinate: %f,%f,%f\nDistance: %f\n\n',surface_points(1),surface_points(2),surface_points(3),abs(distances))
         continue_flag = input('Search another coordinate (Y/N)?:\n', 's');
     end
 end
 
 % Direct Search
-fprintf('\nScalp starting SCD:\n')
-searchend = 1;
-continue_flag = 'Y';
 if dir_search == 1
+    fprintf('\nScalp starting SCD:\n')
+    searchend = 1;
+    continue_flag = 'Y';
     while continue_flag == 'Y'
         target_coord_x = input('Enter target X coordinate\n');
         target_coord_y = input('Enter target Y coordinate\n');
         target_coord_z = input('Enter target Z coordinate\n');
         target_coords = [target_coord_x, target_coord_y, target_coord_z];
         [point,~] = search(subject_brain,target_coords,res_x,res_y,res_z,searchend);
-        distance = sqrt((target_coord_x-point(1))^2+(target_coord_y-point(2))^2+(target_coord_z-point(3))^2);
-        fprintf('Coordinate: %f,%f,%f\nDistance: %f\n',point(1),point(2),point(3),distance)
+        distance = sqrt((target_coord_x-point(1,1))^2+(target_coord_y-point(1,2))^2+(target_coord_z-point(1,3))^2);
+        fprintf('Coordinate: %f,%f,%f\nDistance: %f\n',point(1,1),point(1,2),point(1,3),abs(distance))
         continue_flag = input('Search another coordinate (Y/N)?:\n', 's');
     end
 end
@@ -170,6 +170,10 @@ save(subject_prefix_save)
 
 
 % test brain ruler program
+% changelog 2.0.1 - 2/15/2024
+% - Update direct search to output correct point and distance calculation
+% - Changed inverse search distance to display as positive (changed to absolute value of the vector)
+% - Minor UX changes
 %
 % changelog 0.0.4 - 7/22/2022
 % changelog 0.0.3 - 7/13/2022
@@ -184,16 +188,3 @@ save(subject_prefix_save)
 % - created initial point search function
 % - added function for distance conversion
 % - added time to execute tracking, checkpoint and failure gates
-% 
-% 
-% To Do:
-% refine point search function
-% define search variation for scalp (specific value?) in case transformed
-% EEG point lies inside the scalp
-% refine distance-distance conversion
-% import & sort correct matrix/data
-% automation of SPM
-% put cortex points into matrix and convert back to matrix space
-% split and refine distance finder for the scalp/cortex matrices
-% fix search function for illegitate indices
-% add extra iterations to search function
