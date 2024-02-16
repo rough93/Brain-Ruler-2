@@ -10,8 +10,8 @@
     % rename c1 file to 'subject_brain.nii'
     % rename c4 file to 'subject_skull.nii'
     % rename c5 file to 'subject_scalp.nii'
-    pre_process_all = 0;        % EEG 10-20 Points, scalp-starting SCD search, cortex starting SCD search (very long, not recommended if you don't need EEG 10-20 locations)
-    pre_process_standard = 1;   % Direct and inverse search mapping of the MRI (recommended for most standard users)
+    pre_process_all = 1;        % EEG 10-20 Points, scalp-starting SCD search, cortex starting SCD search (very long, not recommended if you don't need EEG 10-20 locations)
+    pre_process_standard = 0;   % Direct and inverse search mapping of the MRI (recommended for most standard users)
     load_existing = 0;          % Load existing pre-processed file
     % Crop MRI Z-Axis (use this to select the starting Z-point ro remove the
     % MRI below a certain point such as the nose)
@@ -21,7 +21,7 @@
 % Select which routines you would like to run
     eeg_run = 0;    % EEG 10-20 Points
     dir_search = 1; % Direct Search (define points on scalp, get cortex points and distance)
-    inv_search = 0; % Inverse Search (define points in cortex, get points on scalp and distance)
+    inv_search = 1; % Inverse Search (define points in cortex, get points on scalp and distance)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%% END OF SELECTIONS %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -48,7 +48,7 @@ subject_number = input('Input subject number (number where files are stored):\n'
  if load_existing == 1
      load (fullfile('subjects',subject_number,strcat(subject_number,'_preprocessed','.mat')))
  else
-     [subject_head,subject_brain,subject_skull,subject_scalp,res_x,res_y,res_z,trag,inion,circ,Cz,target_cluster,rcv,tri,FV2] = pre_process_func(pre_process_all,...
+     [subject_head,subject_brain,subject_skull,subject_scalp,res_x,res_y,res_z,trag,inion,circ,Cz,target_cluster_scalp,target_cluster_brain,rcv2,rcv3,tri2,tri3,FV2,FV3] = pre_process_func(pre_process_all,...
      pre_process_standard,...
      subject_number,...
      subject_prefix_access_T1,...
@@ -86,9 +86,8 @@ if dir_search == 1
         target_coord_y = input('Enter target Y coordinate\n');
         target_coord_z = input('Enter target Z coordinate\n');
         target_coords = [target_coord_x, target_coord_y, target_coord_z];
-        [point,~] = search(subject_brain,target_coords,res_x,res_y,res_z,searchend);
-        distance = sqrt((target_coord_x-point(1,1))^2+(target_coord_y-point(1,2))^2+(target_coord_z-point(1,3))^2);
-        fprintf('Coordinate: %f,%f,%f\nDistance: %f\n',point(1,1),point(1,2),point(1,3),abs(distance))
+        [distances, surface_points] = direct_search(FV3,target_coords);
+        fprintf('Coordinate: %f,%f,%f\nDistance: %f\n\n',surface_points(1),surface_points(2),surface_points(3),abs(distances))
         continue_flag = input('Search another coordinate (Y/N)?:\n', 's');
     end
 end
@@ -171,6 +170,10 @@ save(subject_prefix_save)
 
 
 % test brain ruler program
+% changelog 2.0.3 - 2/16/2024
+% - implemented mesh preprocessing and searching algorithm to direct search
+% - Code clean up and readability changes across all functions
+%
 % changelog 2.0.2 - 2/15/2024
 % - minor code fixes related to EEG preprocessing and search
 % - added import of Z-start for preprocessing
