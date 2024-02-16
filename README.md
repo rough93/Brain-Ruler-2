@@ -5,6 +5,12 @@ Repository for the Brain Ruler 2 program. Wiki at the [Brain Ruler 2 Notion](htt
 
 # Changelog
 
+## 2.0.3 - 02/16/2024
+- Major implementation of brain meshing to complete accurate and quick direct search measurements
+- General improvements to code functionality and UX across all functions
+> [!NOTE]
+> You will need to re-run pre_processing on subjects to take advantage of the improved direct search functionality
+
 ## 2.0.2 - 02/15/2024
 - Minor code fixes related to EEG preprocessing and search
 - Added import of Z-start for preprocessing
