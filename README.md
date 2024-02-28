@@ -25,7 +25,7 @@ Repository for the Brain Ruler 2 program. Wiki at the [Brain Ruler 2 Notion](htt
 
 
 # Getting Started
-This wiki section walks through the basic program operation for finding Scalp to Cortex Distance and corresponding cortical locations for EEG 10-20 points. For a deeper dive into the theory behind it’s operation, visit [@Program Theory on Notion](https://www.notion.so/Program-Theory-a51a72dfdadf4f99a493b59b0b4bc036?pvs=24).
+This wiki section walks through the basic program operation for finding Scalp to Cortex Distance and corresponding cortical or scalp locations for Euser specified and EG 10-20 points. For a deeper dive into the theory behind it’s operation, visit [@Program Theory on Notion](https://www.notion.so/Program-Theory-a51a72dfdadf4f99a493b59b0b4bc036?pvs=24).
 
 ## Program Requirements
 
